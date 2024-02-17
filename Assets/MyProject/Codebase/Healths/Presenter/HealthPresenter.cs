@@ -1,0 +1,34 @@
+﻿using MyProject.Codebase.Healths.Model;
+using MyProject.Codebase.Healths.View;
+
+namespace MyProject.Codebase.Healths.Presenter
+{
+    public class HealthPresenter
+    {
+        private readonly Health _health;
+        private readonly IHealthView _healthView;
+
+        public HealthPresenter(Health health, IHealthView healthView)
+        {
+            _health = health;
+            _healthView = healthView;
+        }
+
+        public void Enable()
+        {
+            _health.OnHealthChanged += OnHealthChanged;
+            _healthView.SetMaxValue(_health.Max);
+            OnHealthChanged();
+        }
+
+        public void Disable()
+        {
+            _health.OnHealthChanged -= OnHealthChanged;
+        }
+
+        private void OnHealthChanged()
+        {
+            _healthView.SetValue(_health.Current);
+        }
+    }
+}
